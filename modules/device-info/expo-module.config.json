@@ -1,0 +1,9 @@
+{
+  "platforms": ["android", "ios"],
+  "android": {
+    "modules": ["com.debyweb.expo_ui.memory.MemoryInfoPackage"]
+  },
+  "ios": {
+    "modules": ["MemoryInfoModule"]
+  }
+}
