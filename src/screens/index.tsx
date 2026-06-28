@@ -61,7 +61,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Device Memory Info (OTA test)</Text>
+      <Text style={styles.title}>Device Memory Info (OTA test S26+)</Text>
       <Text style={styles.subtitle}>via Native Module (ReactPackage)</Text>
 
       {/* Диагностическая строка */}
