@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { NativeModules } from 'react-native';
-import { Vibration } from 'react-native';
+import { NativeModules, Vibration } from 'react-native';
+import * as Updates from 'expo-updates';
 
 // Получаем нативный модуль MemoryInfo, зарегистрированный через MemoryInfoPackage
 const { MemoryInfo } = NativeModules;
@@ -23,13 +23,13 @@ export default function App() {
   const [memory, setMemory] = useState<MemoryInfoData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState<string>('');
 
   // Асинхронный метод для получения памяти
   const fetchMemory = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      // Используем метод getMemoryInfoAsync, определённый в нативном модуле
       const info: MemoryInfoData = await MemoryInfo.getMemoryInfoAsync();
       setMemory(info);
     } catch (e: any) {
@@ -39,6 +39,21 @@ export default function App() {
     }
   }, []);
 
+  // Диагностика OTA-обновлений
+  useEffect(() => {
+    (async () => {
+      try {
+        const channel = Updates.channel;
+        const check = await Updates.checkForUpdateAsync();
+        setUpdateStatus(
+          `Channel: ${channel} | Update available: ${check.isAvailable}`,
+        );
+      } catch (e: any) {
+        setUpdateStatus(`Error: ${e.message}`);
+      }
+    })();
+  }, []);
+
   // Получаем данные при первом рендере
   useEffect(() => {
     fetchMemory();
@@ -46,8 +61,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Device Memory Info </Text>
+      <Text style={styles.title}>Device Memory Info (OTA test)</Text>
       <Text style={styles.subtitle}>via Native Module (ReactPackage)</Text>
+
+      {/* Диагностическая строка */}
+      {updateStatus !== '' && (
+        <Text style={styles.updateStatus}>{updateStatus}</Text>
+      )}
 
       {error ? (
         <View style={styles.card}>
@@ -72,10 +92,10 @@ export default function App() {
           {loading ? (
             <ActivityIndicator color='#fff' />
           ) : (
-            <Text style={styles.buttonText}>Refresh Memory(async)</Text>
+            <Text style={styles.buttonText}>Refresh Memory (async)</Text>
           )}
         </TouchableOpacity>
-        {/*  внутри return, после кнопки Refresh */}
+
         <TouchableOpacity
           style={styles.button}
           onPress={() => Vibration.vibrate(500)}
@@ -122,7 +142,13 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 30,
+    marginBottom: 10,
+  },
+  updateStatus: {
+    fontSize: 12,
+    color: 'gray',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   card: {
     backgroundColor: '#FFFFFF',
@@ -139,7 +165,7 @@ const styles = StyleSheet.create({
   buttonGroup: {
     width: '100%',
     alignItems: 'center',
-    gap: 12, // отступ между кнопками
+    gap: 12,
   },
   row: {
     flexDirection: 'row',

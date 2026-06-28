@@ -1,1 +1,1 @@
-export { default } from '../screens/NewTodo';
+export { default } from '../screens/index';

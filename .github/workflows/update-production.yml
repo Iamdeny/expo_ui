@@ -1,0 +1,40 @@
+name: OTA Update - Production
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'app.json'
+      - 'assets/**'
+      - 'modules/**'
+
+jobs:
+  update-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Для production добавляем обязательные проверки перед публикацией
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        run: npm test --if-present
+
+      - name: Publish OTA update to production
+        run: |
+          npx eas update --branch production --message "Production: ${{ github.event.head_commit.message }}"
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
