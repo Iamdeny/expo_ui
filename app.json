@@ -7,8 +7,18 @@
     "icon": "./assets/images/icon.png",
     "scheme": "expoui",
     "userInterfaceStyle": "automatic",
+    "updates": {
+      "url": "https://u.expo.dev/c922e657-1502-4f56-aef1-971893f99e62",
+      "enabled": true,
+      "fallbackToCacheTimeout": 10000,
+      "checkAutomatically": "ON_LOAD"
+    },
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "Native",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -17,13 +27,18 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.debyweb.expo_ui"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "./plugins/withMemoryInfo",
+      "./plugins/withVibratePermission",
+      "./plugins/withDeepLinks.js",
+      "./plugins/withIosDeepLinks.js",
       "expo-router",
       [
         "expo-splash-screen",
@@ -39,6 +54,16 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c922e657-1502-4f56-aef1-971893f99e62"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
-  }
+  },
+  "modules": ["./modules/device-info"]
 }
