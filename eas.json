@@ -10,10 +10,6 @@
       "android": {
         "buildType": "apk"
       },
-      "ios": {
-        "simulator": false,
-        "resourceClass": "m1-medium"
-      },
       "env": {
         "APP_NAME": "Expo UI (Dev)",
         "PACKAGE_SUFFIX": "dev"
@@ -25,10 +21,6 @@
       "android": {
         "buildType": "apk"
       },
-      "ios": {
-        "simulator": false,
-        "resourceClass": "m1-medium"
-      },
       "env": {
         "APP_NAME": "Expo UI (Staging)",
         "PACKAGE_SUFFIX": "staging"
@@ -39,10 +31,6 @@
       "channel": "production",
       "android": {
         "buildType": "app-bundle"
-      },
-      "ios": {
-        "simulator": false,
-        "resourceClass": "m-large"
       },
       "env": {
         "APP_NAME": "Expo UI"
