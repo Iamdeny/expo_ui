@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { NativeModules, Vibration } from 'react-native';
 import * as Updates from 'expo-updates';
-// import { supabase } from '../features/auth/api/supabaseClient';
 
 // Получаем нативный модуль MemoryInfo, зарегистрированный через MemoryInfoPackage
 const { MemoryInfo } = NativeModules;
@@ -25,6 +24,33 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [updateStatus, setUpdateStatus] = useState<string>('');
+  const [supabaseStatus, setSupabaseStatus] = useState<string>('');
+
+  // Динамический импорт Supabase только в рантайме
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const { getSupabase } =
+          await import('../features/auth/api/supabaseClient');
+        const supabase = getSupabase();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        if (!cancelled) {
+          setSupabaseStatus(session ? 'Logged in' : 'Not logged in');
+          console.log('Supabase session:', session);
+        }
+      } catch (e: any) {
+        if (!cancelled) {
+          setSupabaseStatus(`Supabase error: ${e.message}`);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Асинхронный метод для получения памяти
   const fetchMemory = useCallback(async () => {
@@ -55,16 +81,6 @@ export default function App() {
     })();
   }, []);
 
-  // внутри компонента
-  // useEffect(() => {
-  //   (async () => {
-  //     const {
-  //       data: { session },
-  //     } = await supabase.auth.getSession();
-  //     console.log('Supabase session:', session);
-  //   })();
-  // }, []);
-
   // Получаем данные при первом рендере
   useEffect(() => {
     fetchMemory();
@@ -75,7 +91,10 @@ export default function App() {
       <Text style={styles.title}>Device Memory Info (OTA test S8)</Text>
       <Text style={styles.subtitle}>via Native Module (ReactPackage)</Text>
 
-      {/* Диагностическая строка */}
+      {/* Статус Supabase */}
+      <Text style={styles.updateStatus}>{supabaseStatus}</Text>
+
+      {/* Диагностика OTA */}
       {updateStatus !== '' && (
         <Text style={styles.updateStatus}>{updateStatus}</Text>
       )}

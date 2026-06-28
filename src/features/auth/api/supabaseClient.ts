@@ -1,6 +1,9 @@
-import { createClient } from '@supabase/supabase-js';
+// src/features/auth/api/supabaseClient.ts
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 import 'react-native-url-polyfill/auto';
+
+let supabase: SupabaseClient | null = null;
 
 const ExpoSecureStoreAdapter = {
   getItem: (key: string) => SecureStore.getItemAsync(key),
@@ -8,18 +11,24 @@ const ExpoSecureStoreAdapter = {
   removeItem: (key: string) => SecureStore.deleteItemAsync(key),
 };
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!;
+export function getSupabase(): SupabaseClient {
+  if (supabase) return supabase;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+  const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables');
+  }
+
+  supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      storage: ExpoSecureStoreAdapter,
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+    },
+  });
+
+  return supabase;
 }
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage: ExpoSecureStoreAdapter,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-});
