@@ -5,13 +5,14 @@ on:
     branches:
       - staging
     paths:
-      - 'src/**' # запуск только при изменениях в src
-      - 'app.json'
+      - 'src/**'
+      - 'app/**'
       - 'assets/**'
       - 'modules/**'
+      - 'app.json'
 
 jobs:
-  update-staging:
+  update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -25,10 +26,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run linting (опционально)
-        run: npm run lint --if-present
-        continue-on-error: true
 
       - name: Publish OTA update to staging
         run: |
