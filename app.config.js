@@ -1,5 +1,5 @@
 // app.config.js
-const basePackage = 'com.debyweb.expo_ui';
+const basePackage = 'com.debyweb.expoui';
 
 // Если передана переменная PACKAGE_SUFFIX, добавляем её через точку,
 // иначе оставляем базовый пакет
@@ -9,7 +9,7 @@ const packageName = process.env.PACKAGE_SUFFIX
 
 module.exports = {
   expo: {
-    name: process.env.APP_NAME || 'expo_ui',
+    name: process.env.APP_NAME || 'expoui',
     slug: 'expo_ui',
     version: '1.0.0',
     orientation: 'portrait',

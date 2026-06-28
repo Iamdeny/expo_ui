@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { NativeModules, Vibration } from 'react-native';
 import * as Updates from 'expo-updates';
-import { supabase } from '../features/auth/api/supabaseClient';
+// import { supabase } from '../features/auth/api/supabaseClient';
 
 // Получаем нативный модуль MemoryInfo, зарегистрированный через MemoryInfoPackage
 const { MemoryInfo } = NativeModules;
@@ -56,14 +56,14 @@ export default function App() {
   }, []);
 
   // внутри компонента
-  useEffect(() => {
-    (async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      console.log('Supabase session:', session);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const {
+  //       data: { session },
+  //     } = await supabase.auth.getSession();
+  //     console.log('Supabase session:', session);
+  //   })();
+  // }, []);
 
   // Получаем данные при первом рендере
   useEffect(() => {
