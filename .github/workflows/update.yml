@@ -2,7 +2,7 @@ name: OTA Update
 on:
   push:
     branches:
-      - development   # или main, если хотите триггерить при пуше в основную ветку
+      - development # или main, если хотите триггерить при пуше в основную ветку
 
 jobs:
   update:
@@ -21,6 +21,7 @@ jobs:
         run: npm ci
 
       - name: Publish OTA update
-        run: npx eas update --branch development --message "CI update: ${{ github.event.head_commit.message }}"
+        run: |
+        npx eas update --branch development --message "CI update: ${{ github.event.head_commit.message }}"
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
