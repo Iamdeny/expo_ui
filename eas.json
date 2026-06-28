@@ -11,7 +11,14 @@
     },
     "preview": {
       "distribution": "internal",
-      "channel": "staging"
+      "channel": "staging",
+      "env": {
+        "APP_NAME": "Expo UI (Dev)"
+      },
+      "ios": {
+        "simulator": false,
+        "resourceClass": "m1-medium"
+      }
     },
     "production": {
       "distribution": "store",

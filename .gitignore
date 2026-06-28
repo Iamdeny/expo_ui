@@ -1,5 +1,13 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+# Игнорировать все файлы окружения
+.env
+.env.local
+.env.*.local
+
+# Исключение для шаблона (чтобы другие разработчики видели структуру)
+!.env.example
+
 # dependencies
 node_modules/
 
