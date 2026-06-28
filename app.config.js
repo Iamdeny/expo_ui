@@ -1,7 +1,15 @@
 // app.config.js
-const appConfig = {
+const basePackage = 'com.debyweb.expo_ui';
+
+// Если передана переменная PACKAGE_SUFFIX, добавляем её через точку,
+// иначе оставляем базовый пакет
+const packageName = process.env.PACKAGE_SUFFIX
+  ? `${basePackage}.${process.env.PACKAGE_SUFFIX}`
+  : basePackage;
+
+module.exports = {
   expo: {
-    name: process.env.APP_NAME || 'expo_ui', // ← динамическое имя
+    name: process.env.APP_NAME || 'expo_ui',
     slug: 'expo_ui',
     version: '1.0.0',
     orientation: 'portrait',
@@ -16,7 +24,7 @@ const appConfig = {
     },
     ios: {
       icon: './assets/expo.icon',
-      bundleIdentifier: 'yes',
+      bundleIdentifier: packageName, // ← синхронизируем с Android
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
       },
@@ -29,7 +37,7 @@ const appConfig = {
         monochromeImage: './assets/images/android-icon-monochrome.png',
       },
       predictiveBackGestureEnabled: false,
-      package: 'com.debyweb.expo_ui',
+      package: packageName, // ← теперь динамический
     },
     web: {
       output: 'static',
@@ -69,5 +77,3 @@ const appConfig = {
   },
   modules: ['./modules/device-info'],
 };
-
-module.exports = appConfig;

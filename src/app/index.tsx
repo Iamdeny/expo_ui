@@ -1,1 +1,1 @@
-export { default } from '../features/auth/screens/Index';
+export { default } from '../features/auth/screens';
